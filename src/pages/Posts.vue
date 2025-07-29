@@ -31,34 +31,23 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { api } from 'boot/axios'
 import { useQuasar } from 'quasar'
-
+import { usePostsStore } from 'src/stores/posts'
+const store = usePostsStore()
 const posts = ref([]);
 
-const getPosts = async () => {
+onMounted(() => {
   const $q = useQuasar()
 
   $q.loading.show()
-  await api.get('v2/posts')
-    .then(response => {
-      console.log(response.data);
-      if (response.data) {
-        posts.value = response.data;
-      } else {
-        console.error('No posts found');
-      }
 
-      $q.loading.hide()
-    })
-    .catch(error => {
-      console.error('Error fetching posts:', error);
-      $q.loading.hide()
-    });
-}
-
-onMounted(() => {
-  getPosts();
+  store.setPosts().then(() => {
+    posts.value = store.posts;
+    $q.loading.hide()
+  }).catch(error => {
+    $q.loading.hide()
+    console.error('Error fetching posts from store:', error);
+  });
 });
 
 </script>
