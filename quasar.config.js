@@ -52,7 +52,13 @@ export default defineConfig((ctx) => {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: ctx.dev
+        ? {
+          API: 'https://viladosilicio.com.br/wp-json/wp/'
+        }
+        : {
+          API: 'https://viladosilicio.com.br/wp-json/wp/'
+        },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
@@ -107,7 +113,9 @@ export default defineConfig((ctx) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins:  [
+        'Loading'
+      ],
     },
 
     // animations: 'all', // --- includes all animations
