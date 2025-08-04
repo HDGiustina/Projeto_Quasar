@@ -3,8 +3,8 @@
     <!-- content -->
     <h1>Posts</h1>
 
-    <section class="row q-gutter-lg" v-if="posts.length">
-      <div class="col-md-4 col-xs-12 width-custom shadow-5" v-for="(post, ind) in posts" :key="ind">
+    <section class="cards-posts q-gutter-lg" v-if="posts.length">
+      <div class="shadow-5" v-for="(post, ind) in posts" :key="ind">
         <q-card class="card-fill-height column">
           <img :src="post.jetpack_featured_media_url" class="image-post" />
 
@@ -19,7 +19,7 @@
           </q-card-section>
 
           <q-card-actions>
-            <q-btn push color="dark" class="full-width">Detalhes</q-btn>
+            <q-btn push color="dark" class="full-width" @click="detalhar(post.id)">Detalhes</q-btn>
           </q-card-actions>
         </q-card>
 
@@ -33,9 +33,10 @@
 import { ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { usePostsStore } from 'src/stores/posts'
+import { useRouter } from 'vue-router'
 const store = usePostsStore()
 const posts = ref([]);
-
+const router = useRouter();
 onMounted(() => {
   const $q = useQuasar()
 
@@ -49,6 +50,10 @@ onMounted(() => {
     console.error('Error fetching posts from store:', error);
   });
 });
+
+const detalhar = (id) => {
+  router.push({ path: '/artigo/' + id });
+}
 
 </script>
 
@@ -79,9 +84,21 @@ onMounted(() => {
   text-overflow: ellipsis;
 }
 
+.cards-posts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
 @media (max-width: 1024px) {
   .width-custom {
     width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .cards-posts {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 }
 </style>
